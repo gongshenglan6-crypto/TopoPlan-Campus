@@ -61,7 +61,7 @@ npm run build
 | 龚胜岚 | 拓扑交互、AI 助手接入与联调、回归测试及作品打包 |
 | 杨淑琼 | 需求分析、技术文档与使用说明、功能验收和材料核对 |
 
-仓库地址仍需创建或提供，详见 docs/团队信息.md。项目整理者标识 Submission Maintainer 仅用于本次本地材料提交记录，不代表团队成员身份。
+仓库地址：https://github.com/gongshenglan6-crypto/TopoPlan 。详见 docs/团队信息.md。项目整理者标识 Submission Maintainer 仅用于本次本地材料提交记录，不代表团队成员身份。
 
 ## 提交与演示
 PDF 技术文档位于 docs/TopoPlan技术文档.pdf，视频按用户要求未制作。在线演示为可选加分项；localhost 不是评审可访问地址。仓库发布步骤与赛前核对清单见 docs/提交清单.md。源码包含 Git 元数据；另有 Git bundle 可恢复记录。未附带原始含个人数据的 SQL、任何外部模型密钥或用户会话。
