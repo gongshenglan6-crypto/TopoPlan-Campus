@@ -242,13 +242,25 @@ const projectCards = computed(() => props.projectItems.map((project) => ({
   state: project.status || '草稿'
 })))
 
+const pageEntranceKey = ref(0)
+watch(() => props.activePage, () => { pageEntranceKey.value++ })
 const isNewDialogue = computed(() => props.activePage === 'new-chat')
 const isDialoguePage = computed(() => props.activePage === 'chat' || props.activePage === 'new-chat')
 const activeChatMessages = computed(() => chatMessages.value[props.chatId] || [])
 const dialogueMessages = computed(() => (isNewDialogue.value ? newChatMessages.value : activeChatMessages.value))
-const visibleDialogueMessages = computed(() => dialogueMessages.value.filter((message) => (
+const dialogueHistoryLimit = ref(20)
+const eligibleDialogueMessages = computed(() => dialogueMessages.value.filter((message) => (
   (message.role === 'user' || message.role === 'assistant') && !['invalid', 'superseded'].includes(String(message.status || '').toLowerCase())
 )))
+const visibleDialogueMessages = computed(() => eligibleDialogueMessages.value.slice(-dialogueHistoryLimit.value))
+const hiddenDialogueCount = computed(() => Math.max(0, eligibleDialogueMessages.value.length - dialogueHistoryLimit.value))
+watch([() => props.chatId, () => props.activePage, () => props.newChatSessionKey], () => { dialogueHistoryLimit.value = 20 })
+async function showEarlierDialogue(event) {
+  const boundary = event.currentTarget.nextElementSibling
+  dialogueHistoryLimit.value += 20
+  await nextTick()
+  boundary?.scrollIntoView({ block: 'start' })
+}
 const currentConversation = computed(() => ({
   id: props.chatId ?? null,
   title: props.chatTitle?.trim() || '新对话',
@@ -1838,7 +1850,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="workspace">
+  <div class="workspace" :data-page="activePage" :class="pageEntranceKey % 2 ? 'page-enter-a' : 'page-enter-b'">
     <template v-if="activePage === 'chat-search'">
       <section class="chat-search-surface">
         <div class="chat-search-panel">
@@ -2237,6 +2249,8 @@ onBeforeUnmount(() => {
               </button>
             </div>
           </div>
+
+          <button v-if="hiddenDialogueCount" class="chat-history-more" type="button" @click="showEarlierDialogue">查看更早记录（{{ hiddenDialogueCount }} 条）</button>
 
           <article
             v-for="message in visibleDialogueMessages"

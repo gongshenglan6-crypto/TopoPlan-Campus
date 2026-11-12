@@ -38,6 +38,8 @@ const props = defineProps({
 const emit = defineEmits(['download-attachment', 'preview-attachment'])
 
 const renderedContent = ref('')
+const expanded = ref(false)
+const canCollapse = computed(() => props.status === 'complete' && props.content.length > 1600)
 const imagePreview = ref(null)
 const copiedCodeButton = ref(null)
 let markdownRenderTimer = null
@@ -198,10 +200,14 @@ onBeforeUnmount(() => {
     <div
       v-if="renderedContent"
       class="markdown-content"
-      :class="{ 'is-streaming': status === 'streaming' }"
+      :class="{ 'is-collapsed': canCollapse && !expanded, 'is-streaming': status === 'streaming' }"
       @click="handleMarkdownClick"
       v-html="renderedHtml"
     ></div>
+
+    <button v-if="canCollapse" class="message-expand" type="button" :aria-expanded="expanded" @click="expanded = !expanded">
+      {{ expanded ? '收起长回复' : '展开完整回复' }}
+    </button>
 
     <section v-if="attachments.length" class="message-file-list" aria-label="相关文件">
       <article v-for="attachment in attachments" :key="attachment.id || attachment.name" class="message-file-card">
@@ -233,6 +239,12 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+/* Markdown generates its own block spacing; inherited pre-wrap doubles it. */
+.markdown-content { white-space: normal; min-width: 0; }
+.markdown-content.is-collapsed { max-height: 460px; overflow: hidden; mask-image: linear-gradient(#000 88%, transparent); }
+.message-expand { margin: 8px 0; padding: 6px 10px; border: 1px solid #dbe5ef; border-radius: 6px; background: #f8fbff; color: #2563eb; cursor: pointer; font: inherit; font-size: 12px; }
+.message-expand:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+
 .ai-message-content {
   min-width: 0;
   color: #2b2f33;

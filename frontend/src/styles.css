@@ -15063,3 +15063,17 @@ html.is-admin-ai-engine-page #app,
   .app-shell.admin-shell .prompt-output-select,
   .app-shell.admin-shell .prompt-schema-field textarea { font-size: 14px; }
 }
+
+/* Replay a gentle downward entrance on navigation, with bounded stagger. */
+@keyframes page-down-a { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
+@keyframes page-down-b { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
+.workspace.page-enter-a > *, .admin-workspace > * { animation: page-down-a 360ms ease-out both; }
+.workspace.page-enter-b > * { animation: page-down-b 360ms ease-out both; }
+.workspace > :nth-child(2), .admin-workspace > :nth-child(2) { animation-delay: 45ms; }
+.workspace > :nth-child(3), .admin-workspace > :nth-child(3) { animation-delay: 90ms; }
+.chat-history-more { display: block; margin: 8px auto 18px; padding: 7px 14px; border: 1px solid #dbe5ef; border-radius: 8px; background: #f8fbff; color: #2563eb; cursor: pointer; }
+.workspace-view-enter-from, .admin-shell .workspace-view-enter-from { opacity: 0; transform: translateY(-12px); }
+@media (prefers-reduced-motion: reduce) {
+  .workspace.page-enter-a > *, .workspace.page-enter-b > *, .admin-workspace > * { animation: none; }
+  .workspace-view-enter-from, .admin-shell .workspace-view-enter-from { transform: none; }
+}
