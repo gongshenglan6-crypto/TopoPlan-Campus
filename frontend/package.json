@@ -1,0 +1,25 @@
+{
+  "name": "topology-planner-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "verify": "npm run test && npm run verify:composer-stability && npm run build",
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "verify:composer-stability": "node scripts/check-chat-composer-stability.mjs"
+  },
+  "dependencies": {
+    "@lucide/vue": "^1.25.0",
+    "@mdit/plugin-katex": "^1.0.1",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "echarts": "^6.1.0",
+    "highlight.js": "^11.11.1",
+    "katex": "^0.17.0",
+    "markdown-it": "^14.3.0",
+    "vite": "^8.1.5",
+    "vue": "^3.5.40"
+  }
+}

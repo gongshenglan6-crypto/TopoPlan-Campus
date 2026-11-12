@@ -1,0 +1,10 @@
+node_modules/
+dist/
+target/
+.m2/
+logs/
+uploads/
+.env
+*.log
+*.sql.local
+.DS_Store
