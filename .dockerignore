@@ -1,0 +1,14 @@
+.git
+.env
+.env.*
+!.env.example
+**/node_modules
+**/target
+**/dist
+**/logs
+**/uploads
+**/*.log
+**/*.bundle
+.m2
+backend/demo1/src/main/resources/static
+.railway

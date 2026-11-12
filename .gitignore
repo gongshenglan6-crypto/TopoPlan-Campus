@@ -5,6 +5,11 @@ target/
 logs/
 uploads/
 .env
+.env.*
+!.env.example
+!.env.server.example
 *.log
 *.sql.local
 .DS_Store
+backend/demo1/src/main/resources/static/
+.railway/

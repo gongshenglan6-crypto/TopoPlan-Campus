@@ -1,7 +1,7 @@
 {
   "date": "2026-11-12",
   "backend": {
-    "tests": 55,
+    "tests": 57,
     "failures": 0,
     "errors": 0,
     "suites": [
@@ -62,6 +62,13 @@
         "skipped": "0"
       },
       {
+        "name": "com.agent.config.SpaControllerTest",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
         "name": "com.agent.Demo1ApplicationTests",
         "tests": "1",
         "failures": "0",
@@ -114,5 +121,6 @@
   "frontend_build": "PASS",
   "frontend_build_note": "Bundle size warning; no build failure",
   "database_verification": "DDL extracted from supplied SQL; new MySQL import not rerun in this preparation",
-  "pdf_pages": 12
+  "pdf_pages": 12,
+  "cloud_packaging": "Combined frontend/backend JAR built; Docker runtime and public deployment not yet validated"
 }
