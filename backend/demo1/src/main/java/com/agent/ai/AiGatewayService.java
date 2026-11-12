@@ -142,6 +142,11 @@ public class AiGatewayService {
         } catch (ApiException exception) {
             throw new AiGatewayException(exception.getCode(), exception.getMessage(), 0, requestUrl, elapsed(startedAt));
         } catch (Exception exception) {
+            // Diagnose swallowed runtime failures without logging credentials,
+            // exception messages or provider response bodies.
+            StackTraceElement[] trace = exception.getStackTrace();
+            log.warn("AI_GATEWAY_UNEXPECTED_FAILURE type={} location={} latencyMs={}",
+                    exception.getClass().getName(), trace.length == 0 ? "unknown" : trace[0], elapsed(startedAt));
             throw new AiGatewayException("PROVIDER_ERROR", "模型服务响应无效", 0, requestUrl, elapsed(startedAt));
         } finally {
             if (connection != null) connection.disconnect();

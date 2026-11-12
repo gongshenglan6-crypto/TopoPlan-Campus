@@ -16,7 +16,7 @@ AI 经 AiOrchestrator、PromptRuntimeService、AiModelRouter、AiGatewayService 
 
 ## 目录
 ```
-frontend/                 Vue 前端与 103 项检查
+frontend/                 Vue 前端与 107 项检查
 backend/demo1/            Spring Boot 后端与自动化测试
 database/schema.sql      21 张表的纯结构，不包含业务数据或密钥
 docs/                    环境、AI、验收案例、技术文档和提交说明
@@ -68,4 +68,6 @@ PDF 技术文档位于 docs/TopoPlan技术文档.pdf，视频按用户要求未�
 
 ## 云端演示部署
 
-已提供 Dockerfile、Railway 部署配置和页面路由适配，新增两项测试后后端共 57 项通过。部署步骤与限制见 docs/云端部署.md。当前 Railway 工作区限制阻止创建网站服务，尚未提供公网演示地址。
+已提供 Dockerfile、Railway 部署配置和页面路由适配，新增两项测试后后端共 64 项通过。部署步骤与限制见 docs/云端部署.md。当前 Railway 工作区限制阻止创建网站服务，尚未提供公网演示地址。
+
+AI 临时故障恢复：服务端在收到任何回复前，对短暂错误最多重试一次；登录初始化读请求可恢复一次临时故障。已通过 3 次正常登录及 2 次真实流式回复验证，详情见 docs/验证报告.md。

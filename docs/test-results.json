@@ -1,10 +1,17 @@
 {
   "date": "2026-11-12",
   "backend": {
-    "tests": 57,
+    "tests": 64,
     "failures": 0,
     "errors": 0,
     "suites": [
+      {
+        "name": "com.agent.Demo1ApplicationTests",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
       {
         "name": "com.agent.admin.AdminApiIntegrationTest",
         "tests": "10",
@@ -29,6 +36,13 @@
       {
         "name": "com.agent.ai.AiGatewayContentValidationTest",
         "tests": "3",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.agent.ai.AiModelRouterRecoveryTest",
+        "tests": "7",
         "failures": "0",
         "errors": "0",
         "skipped": "0"
@@ -64,13 +78,6 @@
       {
         "name": "com.agent.config.SpaControllerTest",
         "tests": "2",
-        "failures": "0",
-        "errors": "0",
-        "skipped": "0"
-      },
-      {
-        "name": "com.agent.Demo1ApplicationTests",
-        "tests": "1",
         "failures": "0",
         "errors": "0",
         "skipped": "0"
@@ -113,7 +120,7 @@
     ]
   },
   "frontend": {
-    "tests": 103,
+    "tests": 107,
     "failures": 0,
     "errors": 0
   },
@@ -122,5 +129,11 @@
   "frontend_build_note": "Bundle size warning; no build failure",
   "database_verification": "DDL extracted from supplied SQL; new MySQL import not rerun in this preparation",
   "pdf_pages": 12,
-  "cloud_packaging": "Combined frontend/backend JAR built; Docker runtime and public deployment not yet validated"
+  "cloud_packaging": "Combined frontend/backend JAR built; Docker runtime and public deployment not yet validated",
+  "live_ai_recovery": {
+    "login_cycles": 3,
+    "completed_streams": 2,
+    "provider": "DeepSeek",
+    "date": "2026-11-12"
+  }
 }

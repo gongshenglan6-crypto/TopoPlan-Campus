@@ -1,6 +1,8 @@
 package com.agent.ai;
 
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -8,6 +10,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Single runtime routing policy for chat/reasoning models. Candidates are already
@@ -16,6 +20,7 @@ import java.util.function.Function;
  */
 @Service
 public class AiModelRouter {
+    private static final Logger log = LoggerFactory.getLogger(AiModelRouter.class);
     private final AiGatewayService gateway;
     private final AiModelService models;
 
@@ -34,7 +39,8 @@ public class AiModelRouter {
             if (!models.runtimeAvailable(model)) continue;
             attempted.add(model.getId());
             try {
-                AiGatewayResult result = gateway.complete(model, messages.apply(model), overrides.apply(model));
+                AiGatewayResult result = retryBeforeOutput(model,
+                        () -> gateway.complete(model, messages.apply(model), overrides.apply(model)), new AtomicBoolean());
                 models.recordRuntimeSuccess(model, result.latencyMs());
                 return new RouteResult(model, result, attempted, !attempted.isEmpty() && !attempted.getFirst().equals(model.getId()), failures, false);
             } catch (AiGatewayException exception) {
@@ -64,10 +70,10 @@ public class AiModelRouter {
             attempted.add(model.getId());
             java.util.concurrent.atomic.AtomicBoolean emitted = new java.util.concurrent.atomic.AtomicBoolean();
             try {
-                AiGatewayResult result = gateway.stream(model, messages.apply(model), token -> {
+                AiGatewayResult result = retryBeforeOutput(model, () -> gateway.stream(model, messages.apply(model), token -> {
                     emitted.set(true);
                     onDelta.accept(model, token);
-                }, overrides.apply(model));
+                }, overrides.apply(model)), emitted);
                 models.recordRuntimeSuccess(model, result.latencyMs());
                 return new RouteResult(model, result, attempted, attempted.size() > 1, failures, false);
             } catch (AiGatewayException exception) {
@@ -87,6 +93,32 @@ public class AiModelRouter {
         throw new AiRoutingException(last, attempted, failures);
     }
 
+    private AiGatewayResult retryBeforeOutput(AiModel model, Supplier<AiGatewayResult> call, AtomicBoolean emitted) {
+        try {
+            return call.get();
+        } catch (AiGatewayException failure) {
+            // Once any text is visible, another generation could concatenate a
+            // different answer. Retry only a short transient failure, once.
+            if (emitted.get() || failure.getLatencyMs() > 45_000 || !transientFailure(failure)) throw failure;
+            log.info("AI_MODEL_RETRY modelId={} code={} retry=1", model.getId(), failure.getCode());
+            try {
+                Thread.sleep(400);
+            } catch (InterruptedException interrupted) {
+                Thread.currentThread().interrupt();
+                throw new AiGatewayException("STREAM_INTERRUPTED", "AI 请求已中断");
+            }
+            return call.get();
+        }
+    }
+
+    private boolean transientFailure(AiGatewayException failure) {
+        return switch (failure.getCode()) {
+            case "NETWORK_ERROR", "CONNECTION_TIMEOUT", "MODEL_TIMEOUT", "PROVIDER_5XX" -> true;
+            case "PROVIDER_ERROR" -> failure.getHttpStatus() == 0;
+            default -> false;
+        };
+    }
+
     private List<AiModel> dedupe(List<AiModel> candidates) {
         Set<Long> ids = new LinkedHashSet<>();
         List<AiModel> result = new ArrayList<>();
@@ -102,7 +134,7 @@ public class AiModelRouter {
         return switch (code.toUpperCase(java.util.Locale.ROOT)) {
             case "INVALID_REQUEST", "CONVERSATION_NOT_FOUND", "PROJECT_ACCESS_DENIED", "PROMPT_NOT_FOUND",
                     "PROMPT_UNAVAILABLE", "PROMPT_DISABLED", "PROMPT_EMPTY", "MODEL_TYPE_INCOMPATIBLE",
-                    "MODEL_NOT_AVAILABLE", "INSUFFICIENT_BALANCE", "QUOTA_EXCEEDED" -> false;
+                    "MODEL_NOT_AVAILABLE", "INSUFFICIENT_BALANCE", "QUOTA_EXCEEDED", "STREAM_INTERRUPTED" -> false;
             default -> true;
         };
     }

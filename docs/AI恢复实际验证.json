@@ -1,0 +1,36 @@
+[
+  {
+    "login_cycle": 1,
+    "models_available": 1
+  },
+  {
+    "login_cycle": 2,
+    "models_available": 1
+  },
+  {
+    "login_cycle": 3,
+    "models_available": 1
+  },
+  {
+    "stream_done": true,
+    "characters": 67,
+    "failure": null,
+    "event_types": [
+      "done",
+      "message",
+      "status",
+      "token"
+    ]
+  },
+  {
+    "stream_done": true,
+    "characters": 1407,
+    "failure": null,
+    "event_types": [
+      "done",
+      "message",
+      "status",
+      "token"
+    ]
+  }
+]
