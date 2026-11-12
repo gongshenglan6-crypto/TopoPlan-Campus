@@ -20,7 +20,7 @@ public class ApiKeyCrypto {
     private final SecretKeySpec secretKey;
     private final SecureRandom secureRandom = new SecureRandom();
 
-    public ApiKeyCrypto(@Value("${topo.config-encryption-key:topo-local-development-key-change-me}") String encryptionKey) {
+    public ApiKeyCrypto(@Value("${topo.config-encryption-key}") String encryptionKey) {
         try {
             secretKey = new SecretKeySpec(MessageDigest.getInstance("SHA-256")
                     .digest(encryptionKey.getBytes(StandardCharsets.UTF_8)), "AES");

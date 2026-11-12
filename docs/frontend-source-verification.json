@@ -1,0 +1,5 @@
+{
+  "source_files_matched": 112,
+  "match": "byte-for-byte",
+  "build": "Vite production build passed on original matching frontend"
+}

@@ -29,7 +29,7 @@ public class AdminConfigService {
     private final SecureRandom secureRandom = new SecureRandom();
 
     public AdminConfigService(AdminConfigRepository repository, ObjectMapper mapper, AuditService auditService,
-                               @Value("${topo.config-encryption-key:topo-local-development-key-change-me}") String encryptionKey) {
+                               @Value("${topo.config-encryption-key}") String encryptionKey) {
         this.repository = repository; this.mapper = mapper; this.auditService = auditService;
         try {
             this.secretKey = new SecretKeySpec(MessageDigest.getInstance("SHA-256")

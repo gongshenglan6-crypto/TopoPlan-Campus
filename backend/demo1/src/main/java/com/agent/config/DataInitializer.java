@@ -29,7 +29,7 @@ public class DataInitializer {
                                 SubscriptionService subscriptionService,
                                 @Value("${topo.bootstrap.enabled:true}") boolean enabled,
                                 @Value("${TOPO_ADMIN_PASSWORD:}") String adminPassword,
-                                @Value("${topo.knowledge.seed-files:../../1.txt,../../网络拓扑工程规划辅助系统详细设计.md}") String seedFiles) {
+                                @Value("${topo.knowledge.seed-files:../../docs/knowledge/network-basics.md}") String seedFiles) {
         return args -> {
             subscriptionService.migrateExistingUsersAndPlans();
             migrateProjectPublicIds(projectRepository);

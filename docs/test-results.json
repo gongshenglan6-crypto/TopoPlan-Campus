@@ -1,0 +1,118 @@
+{
+  "date": "2026-11-12",
+  "backend": {
+    "tests": 55,
+    "failures": 0,
+    "errors": 0,
+    "suites": [
+      {
+        "name": "com.agent.admin.AdminApiIntegrationTest",
+        "tests": "10",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.agent.admin.AiModelTestIntegrationTest",
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.agent.admin.config.PromptRuntimeServiceTest",
+        "tests": "3",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.agent.ai.AiGatewayContentValidationTest",
+        "tests": "3",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.agent.ai.OnlineProviderStreamingRequestTest",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.agent.auth.AuthControllerIntegrationTest",
+        "tests": "13",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.agent.chat.AiOrchestratorTest",
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.agent.chat.ChatServiceOutputValidationTest",
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.agent.Demo1ApplicationTests",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.agent.file.ProjectFileIntegrationTest",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.agent.knowledge.KnowledgeApiIntegrationTest",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.agent.topology.TopologyCheckServiceTest",
+        "tests": "5",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.agent.topology.TopologyIntegrationTest",
+        "tests": "3",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.agent.user.UserProjectChatIntegrationTest",
+        "tests": "1",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  "frontend": {
+    "tests": 103,
+    "failures": 0,
+    "errors": 0
+  },
+  "composer_check": "PASS",
+  "frontend_build": "PASS",
+  "frontend_build_note": "Bundle size warning; no build failure",
+  "database_verification": "DDL extracted from supplied SQL; new MySQL import not rerun in this preparation",
+  "pdf_pages": 12
+}
