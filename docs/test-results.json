@@ -1,17 +1,10 @@
 {
-  "date": "2026-11-12",
+  "date": "2026-11-13",
   "backend": {
-    "tests": 64,
+    "tests": 67,
     "failures": 0,
     "errors": 0,
     "suites": [
-      {
-        "name": "com.agent.Demo1ApplicationTests",
-        "tests": "1",
-        "failures": "0",
-        "errors": "0",
-        "skipped": "0"
-      },
       {
         "name": "com.agent.admin.AdminApiIntegrationTest",
         "tests": "10",
@@ -49,7 +42,7 @@
       },
       {
         "name": "com.agent.ai.OnlineProviderStreamingRequestTest",
-        "tests": "1",
+        "tests": "2",
         "failures": "0",
         "errors": "0",
         "skipped": "0"
@@ -70,7 +63,7 @@
       },
       {
         "name": "com.agent.chat.ChatServiceOutputValidationTest",
-        "tests": "4",
+        "tests": "6",
         "failures": "0",
         "errors": "0",
         "skipped": "0"
@@ -78,6 +71,13 @@
       {
         "name": "com.agent.config.SpaControllerTest",
         "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.agent.Demo1ApplicationTests",
+        "tests": "1",
         "failures": "0",
         "errors": "0",
         "skipped": "0"

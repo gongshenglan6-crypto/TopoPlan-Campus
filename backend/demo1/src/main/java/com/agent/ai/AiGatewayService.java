@@ -116,6 +116,13 @@ public class AiGatewayService {
             AiRequestOverrides requestOverrides = overrides == null ? AiRequestOverrides.NONE : overrides;
             AiProviderRequest providerRequest = adapter.createRequest(model, requestType, messages, stream, requestOverrides);
             requestUrl = providerRequest.url();
+            int requestTimeout = requestOverrides.timeoutSeconds() == null ? model.getTimeoutSeconds() : requestOverrides.timeoutSeconds();
+            int maxOutputTokens = requestOverrides.maxOutputTokens() == null ? model.getMaxOutputTokens() : requestOverrides.maxOutputTokens();
+            int inputCharacters = messages == null ? 0 : messages.stream()
+                    .map(AiGatewayMessage::content).filter(java.util.Objects::nonNull).mapToInt(String::length).sum();
+            log.debug("AI_GATEWAY_REQUEST provider={} modelId={} requestType={} stream={} messages={} inputChars={} maxOutputTokens={} timeoutSeconds={}",
+                    model.getProviderName(), model.getModelId(), requestType, stream,
+                    messages == null ? 0 : messages.size(), inputCharacters, maxOutputTokens, requestTimeout);
             if (testInvocation) {
                 log.debug("AI model test request provider={} modelId={} requestType={} adapter={} url={}",
                         model.getProviderName(), model.getModelId(), requestType, adapter.providerType(), requestUrl);
@@ -134,7 +141,11 @@ public class AiGatewayService {
         } catch (SocketTimeoutException exception) {
             throw new AiGatewayException("CONNECTION_TIMEOUT", "请求模型服务超时", 0, requestUrl, elapsed(startedAt));
         } catch (AiGatewayException exception) {
-            throw withRequestDetails(exception, requestUrl, elapsed(startedAt));
+            AiGatewayException detailed = withRequestDetails(exception, requestUrl, elapsed(startedAt));
+            log.warn("AI_GATEWAY_FAILURE provider={} modelId={} code={} httpStatus={} latencyMs={} providerMessagePresent={}",
+                    model.getProviderName(), model.getModelId(), detailed.getCode(), detailed.getHttpStatus(),
+                    detailed.getLatencyMs(), detailed.getProviderMessage() != null && !detailed.getProviderMessage().isBlank());
+            throw detailed;
         } catch (IllegalArgumentException exception) {
             throw new AiGatewayException("INVALID_ENDPOINT", "模型接口地址错误", 0, requestUrl, elapsed(startedAt));
         } catch (IOException exception) {

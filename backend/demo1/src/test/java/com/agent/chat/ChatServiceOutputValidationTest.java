@@ -33,4 +33,24 @@ class ChatServiceOutputValidationTest {
     void stillDetectsProseLoopAfterMarkdownRuler() throws Exception {
         assertEquals("SEVERE_REPETITION", anomaly("------------\n办公网络办公网络办公网络"));
     }
+
+    @Test
+    void topologyPlanningGetsEnoughTimeForTheFirstStreamToken() {
+        AiOrchestrator.Decision planning = new AiOrchestrator.Decision(
+                "TOPOLOGY_GENERATION", 0.92, "TOPOLOGY_GENERATION", "规划三层办公楼网络",
+                "{}", 150, 0, true, true, true, true);
+
+        assertEquals(60, ChatService.effectiveTimeoutSeconds(planning, 15, 15));
+        assertEquals(90, ChatService.effectiveTimeoutSeconds(planning, 90, 15));
+    }
+
+    @Test
+    void ordinaryChatKeepsItsConfiguredTimeout() {
+        AiOrchestrator.Decision chat = new AiOrchestrator.Decision(
+                "GENERAL_CHAT", 0.99, "TOPOLOGY_QA", "你好",
+                "{}", 0, 0, false, false, false, false);
+
+        assertEquals(15, ChatService.effectiveTimeoutSeconds(chat, 15, 60));
+        assertEquals(45, ChatService.effectiveTimeoutSeconds(chat, null, 45));
+    }
 }

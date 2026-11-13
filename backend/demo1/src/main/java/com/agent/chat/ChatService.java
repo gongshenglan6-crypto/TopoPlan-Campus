@@ -1125,12 +1125,25 @@ public class ChatService {
         AiRequestOverrides configured = promptRuntime.overrides(prepared.promptConfiguration(), model);
         int configuredMax = configured.maxOutputTokens() == null ? model.getMaxOutputTokens() : configured.maxOutputTokens();
         int allowedMax = quotas.maxOutputTokens(prepared.user(), prepared.businessType(), prepared.estimatedInputTokens(), configuredMax);
+        int timeoutSeconds = effectiveTimeoutSeconds(prepared.decision(), configured.timeoutSeconds(), model.getTimeoutSeconds());
         if (prepared.decision() != null && "NETWORK_QA".equals(prepared.decision().intent())) {
             return new AiRequestOverrides(new BigDecimal("0.3"), new BigDecimal("0.9"), allowedMax,
-                    configured.timeoutSeconds() == null ? model.getTimeoutSeconds() : configured.timeoutSeconds());
+                    timeoutSeconds);
         }
-        if (configured.maxOutputTokens() != null && configured.maxOutputTokens() <= allowedMax) return configured;
-        return new AiRequestOverrides(configured.temperature(), configured.topP(), allowedMax, configured.timeoutSeconds());
+        if (configured.maxOutputTokens() != null && configured.maxOutputTokens() <= allowedMax
+                && configured.timeoutSeconds() != null && configured.timeoutSeconds() == timeoutSeconds) return configured;
+        return new AiRequestOverrides(configured.temperature(), configured.topP(), allowedMax, timeoutSeconds);
+    }
+
+    static int effectiveTimeoutSeconds(AiOrchestrator.Decision decision, Integer configuredTimeout, int modelTimeout) {
+        int resolved = configuredTimeout == null ? modelTimeout : configuredTimeout;
+        // Topology generation sends the resource catalogue and a strict JSON
+        // contract. Providers can need noticeably longer before the first SSE
+        // token than they do for ordinary chat, so keep two router attempts
+        // inside the 180-second emitter while avoiding premature 10-15 second
+        // read timeouts from an aggressively configured model.
+        if (decision != null && decision.planning()) return Math.max(60, resolved);
+        return resolved;
     }
 
     private String businessTypeForTask(String taskType) {
