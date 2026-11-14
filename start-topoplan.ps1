@@ -1,4 +1,4 @@
-﻿﻿param([switch]$NoBrowser)
+﻿param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 
@@ -90,19 +90,20 @@ try {
   while (-not (Test-Port 3306) -and (Get-Date) -lt $deadline) { Start-Sleep -Seconds 1 }
   if (-not (Test-Port 3306)) { throw 'MySQL did not start on port 3306.' }
  }
- $backendUrl = 'http://127.0.0.1:8080/api/auth/csrf'
+ $backendPort = if ($env:PORT) { [int]$env:PORT } else { 8080 }
+ $backendUrl = "http://127.0.0.1:$backendPort/api/auth/csrf"
  $frontendUrl = 'http://localhost:5173'
  $backend = $null
  $frontend = $null
  if (-not (Test-Ready $backendUrl 'backend')) {
-  if (Test-Port 8080) { throw 'Port 8080 is occupied but TopoPlan API is not ready. Check the existing service.' }
+  if (Test-Port $backendPort) { throw "Port $backendPort is occupied but TopoPlan API is not ready." }
   Write-Host 'Starting TopoPlan backend...'
   $backend = Start-Worker 'backend' 'run-topoplan-backend.bat'
  }
  if (-not (Test-Ready $frontendUrl 'frontend')) {
   if (Test-Port 5173) { throw 'Port 5173 is occupied by another service.' }
   Write-Host 'Starting TopoPlan frontend...'
-  $env:VITE_API_PROXY_TARGET = 'http://127.0.0.1:8080'
+  $env:VITE_API_PROXY_TARGET = "http://127.0.0.1:$backendPort"
   $frontend = Start-Worker 'frontend' 'run-topoplan-frontend.bat'
  }
  Write-Host 'Waiting for TopoPlan to be ready...'

@@ -61,7 +61,7 @@ npm run build
 | 龚胜岚 | 拓扑交互、AI 助手接入与联调、回归测试及作品打包 |
 | 杨淑琼 | 需求分析、技术文档与使用说明、功能验收和材料核对 |
 
-仓库地址：https://github.com/gongshenglan6-crypto/TopoPlan-Competition 。详见 docs/团队信息.md。项目整理者标识 Submission Maintainer 仅用于本次本地材料提交记录，不代表团队成员身份。
+仓库地址：https://github.com/gongshenglan6-crypto/TopoPlan-Campus 。详见 docs/团队信息.md。项目整理者标识 Submission Maintainer 仅用于本次本地材料提交记录，不代表团队成员身份。
 
 ## 提交与演示
 PDF 技术文档位于 docs/TopoPlan技术文档.pdf，视频按用户要求未制作。在线演示为可选加分项；localhost 不是评审可访问地址。仓库发布步骤与赛前核对清单见 docs/提交清单.md。源码包含 Git 元数据；另有 Git bundle 可恢复记录。未附带原始含个人数据的 SQL、任何外部模型密钥或用户会话。
@@ -74,3 +74,7 @@ AI 临时故障恢复：服务端在收到任何回复前，对短暂错误最�
 比赛部署：在后端进程环境中设置 TOPO_MODEL_KEY_PRIMARY 为供应商密钥；管理端渠道的 API Key 栏填写 env:TOPO_MODEL_KEY_PRIMARY。数据库只保存加密的引用名。多渠道可分别使用 TOPO_MODEL_KEY_ 开头的不同大写变量；仅为受信任的供应商地址配置对应密钥。更改环境变量后重启后端。
 
 [Windows 环境变量、双服务启动与联通验证](docs/Windows部署指南.md)
+
+## 整理版部署文件
+deploy/wwwroot/topo/ 保留本机整理版的 Vue 静态入口、脚本、样式与字体，可用静态服务器托管。完整业务运行还需将 /api 和 /uploads 转发到本机后端。frontend/ 与 backend/demo1/ 为带修复记录的参赛源码；静态快照单独保留，二者不保证逐字节构建一致。
+后端在 backend/demo1 目录执行 mvn package 生成 JAR；首次部署按 docs/Windows部署指南.md 配置环境。database/schema.sql 提供空库结构。真实业务备份、上传内容及生产凭据仅在本机保存。
