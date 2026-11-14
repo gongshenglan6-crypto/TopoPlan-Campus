@@ -34,7 +34,7 @@ JDK 21、Node.js 22.12+（或 20.19+）、npm、Maven 3.9+、MySQL 8.0+。首次
 3. 复制 .env.example 为 .env，填写数据库密码、随机加密密钥、至少 32 字符的 JWT 密钥和管理员初始密码。不要在值两侧添加引号。加密密钥首次设置后需妥善保管，变更后旧模型密钥无法直接解密。
 4. 双击 启动TopoPlan.bat。启动器读取 .env，检查依赖、安装前端依赖、启动服务并检查就绪状态。
 5. 浏览器打开 http://localhost:5173/；管理员入口 http://localhost:5173/admin。首次管理员用户名 admin，密码为自行填写的 TOPO_ADMIN_PASSWORD。普通用户通过注册页面创建账号。
-6. 管理端新增真实模型渠道，填写供应商提供的 Base URL、模型 ID、API Key，完成连接测试并启用任务绑定。无模型密钥时仍可验证手动拓扑和账号功能，AI 生成功能不能离线模拟通过。
+6. 管理端新增真实模型渠道，填写供应商提供的 Base URL、模型 ID，并在 Key 栏填写环境变量引用 env:TOPO_MODEL_KEY_PRIMARY，完成连接测试并启用任务绑定。无模型密钥时仍可验证手动拓扑和账号功能，AI 生成功能不能离线模拟通过。
 
 ## 手动启动与跨平台
 先将 .env 中变量导出到当前进程环境；后端不自动加载该文件。终端一：进入 backend/demo1 后执行 mvn spring-boot:run。终端二：进入 frontend，执行 npm ci 和 npm run dev。Linux/macOS 使用相同命令并自行设置环境变量。Vite 的 /api 与 /uploads 默认转发到 127.0.0.1:8080；代理目标可用 VITE_API_PROXY_TARGET 覆盖。
@@ -61,7 +61,7 @@ npm run build
 | 龚胜岚 | 拓扑交互、AI 助手接入与联调、回归测试及作品打包 |
 | 杨淑琼 | 需求分析、技术文档与使用说明、功能验收和材料核对 |
 
-仓库地址：https://github.com/gongshenglan6-crypto/TopoPlan 。详见 docs/团队信息.md。项目整理者标识 Submission Maintainer 仅用于本次本地材料提交记录，不代表团队成员身份。
+仓库地址：https://github.com/gongshenglan6-crypto/TopoPlan-Competition 。详见 docs/团队信息.md。项目整理者标识 Submission Maintainer 仅用于本次本地材料提交记录，不代表团队成员身份。
 
 ## 提交与演示
 PDF 技术文档位于 docs/TopoPlan技术文档.pdf，视频按用户要求未制作。在线演示为可选加分项；localhost 不是评审可访问地址。仓库发布步骤与赛前核对清单见 docs/提交清单.md。源码包含 Git 元数据；另有 Git bundle 可恢复记录。未附带原始含个人数据的 SQL、任何外部模型密钥或用户会话。
@@ -71,3 +71,6 @@ PDF 技术文档位于 docs/TopoPlan技术文档.pdf，视频按用户要求未�
 已提供 Dockerfile、Railway 部署配置和页面路由适配，新增两项测试后后端共 64 项通过。部署步骤与限制见 docs/云端部署.md。当前 Railway 工作区限制阻止创建网站服务，尚未提供公网演示地址。
 
 AI 临时故障恢复：服务端在收到任何回复前，对短暂错误最多重试一次；登录初始化读请求可恢复一次临时故障。已通过 3 次正常登录及 2 次真实流式回复验证，详情见 docs/验证报告.md。
+比赛部署：在后端进程环境中设置 TOPO_MODEL_KEY_PRIMARY 为供应商密钥；管理端渠道的 API Key 栏填写 env:TOPO_MODEL_KEY_PRIMARY。数据库只保存加密的引用名。多渠道可分别使用 TOPO_MODEL_KEY_ 开头的不同大写变量；仅为受信任的供应商地址配置对应密钥。更改环境变量后重启后端。
+
+[Windows 环境变量、双服务启动与联通验证](docs/Windows部署指南.md)

@@ -25,6 +25,7 @@ services:
     environment:
       PORT: 8080
       TOPO_DB_URL: jdbc:mysql://mysql:3306/topoplan_demo?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+      TOPO_MODEL_KEY_PRIMARY: ${TOPO_MODEL_KEY_PRIMARY:-}
       TOPO_DB_USERNAME: topoplan
       TOPO_DB_PASSWORD: ${TOPO_DB_PASSWORD:?Configure TOPO_DB_PASSWORD}
       TOPO_CONFIG_ENCRYPTION_KEY: ${TOPO_CONFIG_ENCRYPTION_KEY:?Configure encryption key}

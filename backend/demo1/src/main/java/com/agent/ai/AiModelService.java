@@ -163,6 +163,11 @@ public class AiModelService {
     @Transactional(readOnly = true)
     public String apiKeyFor(AiModel model) {
         String apiKey = crypto.decrypt(model.getEncryptedApiKey());
+        // Resolve only dedicated model credentials, never arbitrary process variables.
+        if (apiKey != null && apiKey.startsWith("env:")) {
+            String name = apiKey.substring(4);
+            apiKey = name.matches("TOPO_MODEL_KEY_[A-Z0-9_]+") ? System.getenv(name) : null;
+        }
         if (isApiKeyPlaceholder(apiKey)) {
             throw new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "API_KEY_NOT_CONFIGURED", "模型 API Key 未配置或仍为展示占位符");
         }
