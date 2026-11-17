@@ -7,7 +7,7 @@
 
 ## 初始化数据库和配置
 在隔离测试数据库执行 database/schema.sql，创建 topo 空库及表；不要在已有业务库盲目执行。外层 database/topo.sql 同样为空库结构，选择一份执行即可。
-在提交目录打开 PowerShell：
+在源码根目录打开 PowerShell：
 ```powershell
 Copy-Item -LiteralPath '.env.example' -Destination '.env'
 notepad .env
@@ -15,7 +15,7 @@ notepad .env
 若 .env 已存在，直接编辑，不覆盖。填写 TOPO_DB_URL、TOPO_DB_USERNAME、TOPO_DB_PASSWORD、TOPO_CONFIG_ENCRYPTION_KEY、TOPO_JWT_SECRET、TOPO_ADMIN_PASSWORD。两个密钥分别随机生成，JWT至少32字符；加密密钥首次配置后妥善保存。等号后不加引号。真实 .env 只留运行电脑。
 
 ## 启动和访问
-在 TopoPlan源码 内双击 启动TopoPlan.bat，或执行：
+在源码根目录内双击 启动TopoPlan.bat，或执行：
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File './start-topoplan.ps1'
 ```
@@ -23,7 +23,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File './start-topoplan.ps1'
 后端默认127.0.0.1:8080，Vite将/api和/uploads转发到后端。不要用jwebserver直接托管网页后认定业务已接通，它不提供接口代理和SPA回退。
 
 ## 手动启动
-在 TopoPlan源码 打开第一个PowerShell，执行：
+在源码根目录打开第一个PowerShell，执行：
 ```powershell
 Get-Content -LiteralPath '.env' -Encoding UTF8 | ForEach-Object {
   if ($_ -match '^\s*([A-Z][A-Z0-9_]*)=(.*)$') {
@@ -33,7 +33,7 @@ Get-Content -LiteralPath '.env' -Encoding UTF8 | ForEach-Object {
 Set-Location -LiteralPath './backend/demo1'
 mvn spring-boot:run
 ```
-从 TopoPlan源码 打开第二个窗口：
+从源码根目录打开第二个窗口：
 ```powershell
 Set-Location -LiteralPath './frontend'
 npm.cmd ci
@@ -47,5 +47,5 @@ npm.cmd run dev -- --host 127.0.0.1 --port 5173 --strictPort
 前端执行 npm.cmd test、npm.cmd run verify:composer-stability、npm.cmd run build；后端执行 mvn test、mvn package。以实际日志为准，本次材料修改未替代团队业务验收。
 
 ## 运行快照和公网评审
-www/wwwroot/topo 与 www/wwwroot/topoplan/app.jar 是保留的运行快照，与源码不保证一致，复现优先从源码构建。配置已脱敏，必须设置自有环境变量。生产部署需HTTPS、接口反向代理和SPA回退，见源码deploy及docs资料。
+外层提交目录的 www/wwwroot/topo 与 www/wwwroot/topoplan/app.jar 是保留的运行快照；公开源码中的静态快照位于 deploy/wwwroot/topo，与源码不保证一致，复现优先从源码构建。配置已脱敏，必须设置自有环境变量。生产部署需HTTPS、接口反向代理和SPA回退，见源码deploy及docs资料。
 异地评审需团队提供已验收的公网入口和权限受限的评审账号。本次不声明旧公网服务可用。真实数据库、上传内容和凭据不随公开材料提交。
